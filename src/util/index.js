@@ -1,37 +1,11 @@
-function getLocalUrl(url){
-  return new Promise((resolve,reject)=>{
-    fetch(url,{
-      responseType:'blob'
-    }).then(res=>res.blob()).then(res=>{
-      let url_ = URL.createObjectURL(res)
-      resolve(url_)
-    }).catch(err=>console.log(err))
-  })
+export function timeTo(e) {	//分钟字符串互转秒数
+  if (typeof e == 'number') {
+    let min = parseInt(e / 60);
+    let second = parseInt(e - min * 60);
+    min = min < 10 ? `0${min}` : min;
+    second = second < 10 ? `0${second}` : second;
+    return `${min}:${second}`;
+  } else {
+    return parseInt(e.slice(0, 2)) * 60 + parseInt(e.slice(3, 5));
+  }
 }
-
-class Player {
-  ctx = null
-  audio = null
-  fft = new Uint8Array(128)
-  analyser = null
-
-  isPlay = false //是否播放中
-
-  init(){
-    this.audio = new Audio()
-    this.ctx = new AudioContext()
-    this.analyser = this.ctx.createAnalyser()
-    let source = this.ctx.createMediaElementSource(this.audio);
-    this.analyser.fftSize = 512
-    source.connect(this.analyser).connect(this.ctx.destination)
-  }
-
-  async start(url){
-    this.ctx || this.init()
-    let localUrl = await getLocalUrl(url)
-    this.audio.src = localUrl
-    this.audio.play()
-  }
-} 
-
-export const player = new Player()

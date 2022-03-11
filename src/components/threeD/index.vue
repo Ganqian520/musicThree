@@ -7,28 +7,36 @@ import { onMounted, ref } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
+import { GUI } from "three/examples/jsm/libs/lil-gui.module.min";
+
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 
-import {player} from '../../util/index.js'
+import { player } from "@/util/Player.js";
+import {Line} from '@/components/threeD/Line.js'
+import {Sphere} from '@/components/threeD/Sphere.js'
+import { materialLine } from "@/components/threeD/material.js";
+import { Triangles } from "@/components/threeD/Triangle.js";
+import {R,N,A,AXES,FFT,COLOR,H} from '@/components/threeD/const.js'
+import {state} from '@/util/state.js'
 
 const canvas = ref(null);
-let renderer, scene, camera, controls, composer;
+let renderer, scene, camera,  composer;
+let orbitControl 
+let clock = new THREE.Clock();
+let gui = {
+  //参数控制
+  threshold: 0.2,
+  strength: 1,
+  radius: 0,
+};
 
-let barGroup; // 柱子
-let N = 128; //柱子数
-let A = 0.5; //柱子边长
-let R = 40; //柱子围成圆圈的边长
-let AXES = 100; //坐标线长度
-let FFT = 20; //柱子最大变化值
-let FFT_ = 10; //线的最大变化值
-let COLOR = 0x00ffff; //主颜色
-let H = 10; //柱子的初始高度
-let outLine; //外线模型
-let inLine;
-let midLines = []; //中间线模型集合
-let points = []; //线需要的点集
+let all
+
+let line
+let sphere
+let traingle 
 
 onMounted(() => {
   init();
@@ -39,54 +47,56 @@ onMounted(() => {
 function init() {
   initThree();
   initControl();
-  initAudioBars();
   initBloomPass();
   initLight();
-  initLines();
-  addWindowListener()
+  // initGui();
+  addWindowListener();
+
+  all = new THREE.Group()
+  scene.add(all)
+  line = new Line(all)
+  line.init()
+  sphere = new Sphere(all)
+  sphere.init()
+  traingle = new Triangles(scene)
+  traingle.init()
 }
-//启动
+//递归
 function animate() {
   requestAnimationFrame(animate);
   update();
   composer.render();
 }
-//更新数据
+//更新
 function update() {
   player.analyser?.getByteFrequencyData(player.fft);
-  // console.log(player.analyser)
-  //柱子
-  barGroup.children.forEach((v, i) => {
-    v.position.y = H + player.fft[i] * (FFT / 256);
+  orbitControl.update()
+  all.rotateY(0.003)
+  sphere.update()
+  line.update()
+  traingle.update()
+}
+//控制器
+function initControl() {
+  orbitControl = new OrbitControls(camera, renderer.domElement);
+  orbitControl.enablePan = false;
+  orbitControl.enableDamping = true; //惯性
+  orbitControl.enableZoom = true; //缩放
+  orbitControl.minDistance = 0; //相机到原点最近距离
+  orbitControl.maxDistance = 1000; //最远距离
+}
+//初始化gui
+function initGui() {
+  let datGui = new GUI();
+  datGui.add(gui, "threshold", 0, 1).onChange(() => {
+    bloomPass.threshold = gui.threshold;
   });
-  //线
-  let arrOut = [];
-  let arrIn = [];
-  for (let i = 0; i < player.fft.length; i++) {
-    let angle = ((Math.PI * 2) / player.fft.length) * i;
-    let x_ = Math.cos(angle) * player.fft[i] * (FFT_ / 256);
-    let z_ = Math.sin(angle) * player.fft[i] * (FFT_ / 256);
-    let arr_mid = [
-      points[i * 3] - x_,
-      0,
-      points[i * 3 + 2] - z_,
-      points[i * 3] + x_,
-      0,
-      points[i * 3 + 2] + z_,
-    ];
-    midLines[i].geometry.getAttribute("position").set(arr_mid, 0);
-    midLines[i].geometry.getAttribute("position").needsUpdate = true;
-    arrOut.push(points[i * 3] + x_);
-    arrOut.push(0);
-    arrOut.push(points[i * 3 + 2] + z_);
-    arrIn.push(points[i * 3] - x_);
-    arrIn.push(0);
-    arrIn.push(points[i * 3 + 2] - z_);
-  }
-  outLine.geometry.getAttribute("position").set(arrOut, 0);
-  inLine.geometry.getAttribute("position").set(arrIn, 0);
-  outLine.geometry.getAttribute("position").needsUpdate = true;
-  inLine.geometry.getAttribute("position").needsUpdate = true;
+  datGui
+    .add(gui, "strength", 0, 1)
+    .onChange(() => (bloomPass.strength = gui.strength));
+  datGui
+    .add(gui, "radius", 0, 1)
+    .onChange(() => (bloomPass.radius = gui.radius));
 }
 
 //窗口重置
@@ -99,41 +109,6 @@ function addWindowListener() {
   });
 }
 
-// 音频线
-function initLines(radius, countData) {
-  let material = new THREE.LineBasicMaterial({
-    color: COLOR,
-  });
-  player.fft.forEach((v, i) => {
-    let angle = ((Math.PI * 2) / player.fft.length) * i;
-    let x = Math.cos(angle) * R;
-    let y = 0;
-    let z = Math.sin(angle) * R;
-    points.push(x, y, z);
-    let geometry = new THREE.BufferGeometry();
-    geometry.attributes.position = new THREE.BufferAttribute(
-      new Float32Array([x, y, z, x, y, z]),
-      3
-    );
-    let line = new THREE.Line(geometry, material);
-    midLines.push(line);
-    scene.add(line);
-  });
-  let geometryOut = new THREE.BufferGeometry();
-  let geometryIn = new THREE.BufferGeometry();
-  geometryOut.attributes.position = new THREE.BufferAttribute(
-    new Float32Array(points),
-    3
-  );
-  geometryIn.attributes.position = new THREE.BufferAttribute(
-    new Float32Array(points),
-    3
-  );
-  outLine = new THREE.LineLoop(geometryOut, material);
-  inLine = new THREE.LineLoop(geometryIn, material);
-  scene.add(outLine, inLine);
-}
-
 // 环境光和平行光
 function initLight() {
   scene.add(new THREE.AmbientLight(0x444444));
@@ -143,39 +118,22 @@ function initLight() {
   light.castShadow = true;
   scene.add(light);
 }
-//光辉
+//辉光
+let bloomPass;
 function initBloomPass() {
   let renderScene = new RenderPass(scene, camera);
-  let bloomPass = new UnrealBloomPass(
+  bloomPass = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
     1.5,
     0.2,
     0
   );
+  bloomPass.threshold = gui.threshold;
+  bloomPass.strength = gui.strength;
+  bloomPass.radius = gui.radius;
   composer = new EffectComposer(renderer);
   composer.addPass(renderScene);
   composer.addPass(bloomPass);
-}
-//音频柱子
-function initAudioBars() {
-  barGroup = new THREE.Group();
-  for (let i = 0; i < N; i++) {
-    let minGroup = new THREE.Group();
-    let box = new THREE.SphereGeometry(A);
-    let material = new THREE.MeshPhongMaterial({
-      color: COLOR,
-    }); // 材质对象
-    let mesh = new THREE.Mesh(box, material);
-
-    mesh.position.y = 0.5;
-    minGroup.add(mesh);
-    let angle = ((Math.PI * 2) / N) * i + Math.PI / 2;
-    let x = Math.sin(angle) * R;
-    let z = Math.cos(angle) * R;
-    minGroup.position.set(x, H, z);
-    barGroup.add(minGroup);
-  }
-  scene.add(barGroup);
 }
 //初始化场景，相机等
 function initThree() {
@@ -185,11 +143,10 @@ function initThree() {
     canvas: canvas.value,
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
   scene = new THREE.Scene();
   scene.background = new THREE.CubeTextureLoader().load(getImg());
   camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 10000);
-  camera.position.set(0, 40, 80);
+  camera.position.set(0, 40, 70);
   camera.lookAt(0, 0, 0);
   let axesHelper = new THREE.AxesHelper(AXES);
   // scene.add(axesHelper);
@@ -208,24 +165,8 @@ function getImg() {
     return new URL(`../../assets/skybox/${v}`, import.meta.url).href;
   });
 }
-//鼠标控制
-function initControl() {
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.enablePan = false;
-  controls.enableDamping = true; //惯性
-  controls.enableZoom = true; //缩放
 
-  controls.autoRotate = true; //自动旋转
-  controls.minDistance = 1; //相机到原点最近距离
-  controls.maxDistance = 200; //最远距离
-}
 </script>
 
 <style scoped >
-.canvas {
-  position: fixed;
-  z-index: -1;
-  top: 0;
-  left: 0;
-}
 </style>
