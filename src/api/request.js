@@ -1,20 +1,10 @@
 import { instance } from "./index.js";
-import { timeTo } from '@/util/index.js'
+import { timeTo, handleNetSongs} from '@/util/index.js'
 import { state } from '@/util/state.js'
 import axios from 'axios'
+import { player } from "../util/Player.js";
 
-//处理歌单
-function handleNetSongs(arr) {
-  return arr.map(v => {
-    return {
-      name: v.name,
-      id: v.id,
-      author: v.ar.map(v => v.name).join('/'),
-      time: Math.floor(v.dt / 1000),
-      platform: 'net',
-    }
-  })
-}
+
 
 //私人fm
 export function getFM() {
@@ -49,7 +39,7 @@ export function getLocalUrl(url) {
   return new Promise((resolve, reject) => {
     fetch(url, {
       responseType: 'blob'
-    }).then(res => res.blob()).then(res => {
+    }).then(res => res.blob()).then( async (res) => {
       state.msg.value = 0
       let url_ = URL.createObjectURL(res)
       resolve(url_)
@@ -208,7 +198,6 @@ export function getSongList(id) {
     let songsList = localStorage.getItem(`songsListNet${uid}`)
     let songList = localStorage.getItem(`songListNet${id}`)
     if (songList) {
-      console.log('缓存', JSON.parse(songList))
       resolve(JSON.parse(songList))
     } else {
       instance.get('/playlist/detail', {
@@ -219,7 +208,6 @@ export function getSongList(id) {
           let list = handleNetSongs(res.data.playlist.tracks)
           //我喜欢列表才缓存
           id == JSON.parse(songsList)[0].id && localStorage.setItem(`songListNet${id}`, JSON.stringify(list))
-          console.log(list)
           resolve(list)
         }
       }).catch(err => console.log(err))

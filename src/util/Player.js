@@ -1,8 +1,10 @@
 import { getRealUrl, getLocalUrl } from '@/api/request.js'
 import { ref } from 'vue'
 
+
 class Player {
   ctx = null
+  source = null
   audio = document.createElement('audio')
   fft = new Uint8Array(128)
   analyser = null
@@ -18,14 +20,13 @@ class Player {
   updateProgressCb = null //进度条回调
   isUserSlide = false //用户是否在滑动进度条
   order = 0  //{ sequential: 0, random: 1, single: 2 } //播放顺序
-  // isWait = ref(true) //鼠标等待
-
+  
   init() {
     this.ctx = new AudioContext()
     this.analyser = this.ctx.createAnalyser()
-    let source = this.ctx.createMediaElementSource(this.audio);
+    this.source = this.ctx.createMediaElementSource(this.audio);
     this.analyser.fftSize = 512
-    source.connect(this.analyser).connect(this.ctx.destination)
+    this.source.connect(this.analyser).connect(this.ctx.destination)
 
     this.audio.ontimeupdate = () => {
       this.updateNetCb && this.music.value.platform == 'net' && this.updateNetCb()
@@ -58,6 +59,7 @@ class Player {
     this.audio.play()
   }
 
+  //下一首
   next() {
     if (this.listWant.length == 0) {
       let list = this.music.value.platform == 'net' ? this.listNet.value : this.listDou.value
