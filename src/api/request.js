@@ -183,11 +183,11 @@ export async function send(phone) {
 //登录
 export async function login(phone, captcha) {
   return new Promise((resolve, reject) => {
-    let phone = '19981490817'
-    let password = '511623aA'
+    // let phone = '19981490817'
+    // let password = '511623aA'
     instance.get('/login/cellphone', {
-      // params: { phone, captcha }
-      params: { phone, password }
+      params: { phone, captcha }
+      // params: { phone, password }
     }).then(res => {
       res = res.data
       let userNet = {
