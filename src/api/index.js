@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios' 
 import { state } from '@/util/state.js'
 
 export const instance = axios.create({
@@ -6,6 +6,7 @@ export const instance = axios.create({
   timeout: 8000,
   withCredentials: true
 })
+
 
 instance.interceptors.request.use(config => {
   state.msg.value = 1

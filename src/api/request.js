@@ -123,15 +123,17 @@ export function getRealUrl(id) {
       data: JSON.stringify({ action: 'getNetEaseMusicUrl', url, })
     }).then(res => {
       if (res.data?.url) {
-        if(res.data.url!='https://music.163.com/404'){
-          resolve(res.data.url)
+        if(res.data.url !='https://music.163.com/404'){
+          let url = res.data.url.replace(/(http|https)/,'https')
+          resolve(url)
         }else{
           instance.get(`/song/url?id=${id}`).then(res=>{
-            resolve(res.data.data[0].url)
+            let url = res.data.data[0].url.replace(/(http|https)/,'https')
+            resolve(url)
           })
         }       
       }
-    }).catch(err => console.log(err))
+    })
   })
 }
 
@@ -171,7 +173,7 @@ export function getDou() {
 }
 
 //发送验证码
-export async function send({ phone }) {
+export async function send(phone) {
   return new Promise((resolve, reject) => {
     instance.get('/captcha/sent', {
       params: { phone }
@@ -183,10 +185,13 @@ export async function send({ phone }) {
   })
 }
 //登录
-export async function login({ phone, captcha }) {
+export async function login(phone, captcha) {
   return new Promise((resolve, reject) => {
+    // let phone = '19981490817'
+    // let password = '511623aA'
     instance.get('/login/cellphone', {
       params: { phone, captcha }
+      // params: { phone, password }
     }).then(res => {
       if (res.status == 200 && res.data.code == 200) {
         res = res.data

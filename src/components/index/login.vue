@@ -39,11 +39,11 @@ async function send_() {
       clearInterval(interval)
     }
   }, 1000);
-  send({ phone: phone.value });
+  send(phone.value);
 }
 function login_() {
   isCanLogin.value = false
-  login({ phone: phone.value, captcha: captcha.value }).catch(err=>{
+  login( phone.value, captcha.value).catch(err=>{
     isCanLogin = true
   })
 }
