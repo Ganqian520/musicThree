@@ -4,7 +4,7 @@ import { state } from '@/util/state.js'
 import axios from 'axios'
 
 //处理歌单
-function handleNetSongs(arr){
+function handleNetSongs(arr) {
   return arr.map(v => {
     return {
       name: v.name,
@@ -20,19 +20,17 @@ function handleNetSongs(arr){
 export function getFM() {
   return new Promise((resolve, reject) => {
     instance.get('/personal_fm').then(res => {
-      if (res.data?.data) {
-        let list = res.data.data.map(v => {
-          return {
-            name: v.name,
-            id: v.id,
-            author: v.artists.map(v => v.name).join('/'), //v.ar
-            time: Math.floor(v.duration / 1000),  //v.dt
-            platform: 'net',
-          }
-        })
-        resolve(list)
-      }
-    })
+      let list = res.data.data.map(v => {
+        return {
+          name: v.name,
+          id: v.id,
+          author: v.artists.map(v => v.name).join('/'), //v.ar
+          time: Math.floor(v.duration / 1000),  //v.dt
+          platform: 'net',
+        }
+      })
+      resolve(list)
+    }).catch(err => console.log(err))
   })
 }
 
@@ -41,7 +39,7 @@ export function addNetLike(id) {
   return new Promise((resolve, reject) => {
     instance.get('/like', {
       params: { id }
-    })
+    }).catch(err => console.log(err))
   })
 }
 
@@ -55,7 +53,10 @@ export function getLocalUrl(url) {
       state.msg.value = 0
       let url_ = URL.createObjectURL(res)
       resolve(url_)
-    }).catch(err => state.msg.value = 0)
+    }).catch(err => {
+      state.msg.value = 0
+      console.log(err)
+    })
   })
 }
 
@@ -65,10 +66,8 @@ export function searchNet(keywords) {
     instance.get('/cloudsearch', {
       params: { keywords }
     }).then(res => {
-      if (res.data?.result?.songs) {
-        resolve(handleNetSongs(res.data.result.songs))
-      }
-    })
+      resolve(handleNetSongs(res.data.result.songs))
+    }).catch(err => console.log(err))
   })
 }
 //网易日推
@@ -78,10 +77,8 @@ export function getNetDay() {
     instance.get('/recommend/songs', {
       params: { uid }
     }).then(res => {
-      if (res.data?.data?.dailySongs) {
-        resolve(handleNetSongs(res.data.data.dailySongs))
-      }
-    })
+      resolve(handleNetSongs(res.data.data.dailySongs))
+    }).catch(err => console.log(err))
   })
 }
 
@@ -108,7 +105,7 @@ export function getLyric(id) {
       } else {
         resolve([])
       }
-    })
+    }).catch(err => console.log(err))
   })
 }
 
@@ -122,18 +119,16 @@ export function getRealUrl(id) {
       url: url_,
       data: JSON.stringify({ action: 'getNetEaseMusicUrl', url, })
     }).then(res => {
-      if (res.data?.url) {
-        if(res.data.url !='https://music.163.com/404'){
-          let url = res.data.url.replace(/(http|https)/,'https')
+      if (res.data.url != 'https://music.163.com/404') {
+        let url = res.data.url.replace(/(http|https)/, 'https')
+        resolve(url)
+      } else {
+        instance.get(`/song/url?id=${id}`).then(res => {
+          let url = res.data.data[0].url.replace(/(http|https)/, 'https')
           resolve(url)
-        }else{
-          instance.get(`/song/url?id=${id}`).then(res=>{
-            let url = res.data.data[0].url.replace(/(http|https)/,'https')
-            resolve(url)
-          })
-        }       
+        })
       }
-    })
+    }).catch(err => console.log(err))
   })
 }
 
@@ -167,7 +162,10 @@ export function getDou() {
           localStorage.setItem('douList', JSON.stringify(list))
           resolve(list)
         }
-      }).catch(err => state.msg.value = 0)
+      }).catch(err => {
+        state.msg.value = 0
+        console.log(err)
+      })
     }
   })
 }
@@ -178,54 +176,53 @@ export async function send(phone) {
     instance.get('/captcha/sent', {
       params: { phone }
     }).then(res => {
-      if (res.status == 200 && res.data.code == 200) {
-        resolve(true)
-      }
-    })
+      resolve(true)
+    }).catch(err => console.log(err))
   })
 }
 //登录
 export async function login(phone, captcha) {
   return new Promise((resolve, reject) => {
-    // let phone = '19981490817'
-    // let password = '511623aA'
+    let phone = '19981490817'
+    let password = '511623aA'
     instance.get('/login/cellphone', {
-      params: { phone, captcha }
-      // params: { phone, password }
+      // params: { phone, captcha }
+      params: { phone, password }
     }).then(res => {
-      if (res.status == 200 && res.data.code == 200) {
-        res = res.data
-        let userNet = {
-          uid: res.account.id,
-          avatarUrl: res.profile.avatarUrl,
-          nickName: res.profile.nickname,
-        };
-        localStorage.setItem("user", JSON.stringify(userNet));
-        state.isLogin.value = true
-        resolve()
-      }
-    })
+      res = res.data
+      let userNet = {
+        uid: res.account.id,
+        avatarUrl: res.profile.avatarUrl,
+        nickName: res.profile.nickname,
+      };
+      localStorage.setItem("user", JSON.stringify(userNet));
+      state.isLogin.value = true
+      resolve()
+    }).catch(err => console.log(err))
   })
 }
 //获取歌曲列表
-export function getSongList({ id }) {
+export function getSongList(id) {
   return new Promise((resolve, reject) => {
     let uid = JSON.parse(localStorage.getItem('user')).uid
     let songsList = localStorage.getItem(`songsListNet${uid}`)
     let songList = localStorage.getItem(`songListNet${id}`)
     if (songList) {
+      console.log('缓存', JSON.parse(songList))
       resolve(JSON.parse(songList))
     } else {
       instance.get('/playlist/detail', {
         params: { id }
       }).then(res => {
+        console.log('请求歌曲列表', res)
         if (res.status == 200 && res.data.code == 200) {
           let list = handleNetSongs(res.data.playlist.tracks)
           //我喜欢列表才缓存
           id == JSON.parse(songsList)[0].id && localStorage.setItem(`songListNet${id}`, JSON.stringify(list))
+          console.log(list)
           resolve(list)
         }
-      })
+      }).catch(err => console.log(err))
     }
   })
 }
@@ -240,21 +237,19 @@ export function getSongsList() {
       instance.get('/user/playlist', {
         params: { uid }
       }).then(res => {
-        if (res.status == 200 && res.data.code == 200) {
-          res = res.data
-          let list = [{ id: res.playlist[0].id, name: '我喜欢' }]
-          for (let i = 1; i < res.playlist.length; i++) {
-            if (!res.playlist[i].subscribed) {
-              list.push({
-                id: res.playlist[i].id,
-                name: res.playlist[i].name
-              })
-            }
+        res = res.data
+        let list = [{ id: res.playlist[0].id, name: '我喜欢' }]
+        for (let i = 1; i < res.playlist.length; i++) {
+          if (!res.playlist[i].subscribed) {
+            list.push({
+              id: res.playlist[i].id,
+              name: res.playlist[i].name
+            })
           }
-          localStorage.setItem(`songsListNet${uid}`, JSON.stringify(list))
-          resolve(list)
         }
-      })
+        localStorage.setItem(`songsListNet${uid}`, JSON.stringify(list))
+        resolve(list)
+      }).catch(err => console.log(err))
     }
   })
 }

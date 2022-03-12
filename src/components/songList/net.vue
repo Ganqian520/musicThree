@@ -5,6 +5,7 @@
         class="list_name"
         @mouseenter="() => (isOpenSongs = true)"
         @mouseleave="() => (isOpenSongs = false)"
+        @dblclick="refreshLike"
       >
         <div class="span_">
           <span
@@ -64,7 +65,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,toRaw } from "vue";
 import { timeTo } from "@/util/index.js";
 import {
   getSongList,
@@ -86,10 +87,20 @@ const keywords = ref("");
 
 onMounted(async () => {
   listSongs.value = await getSongsList();
-  getSongList(listSongs.value[0]).then((res) => {
+  getSongList(toRaw(listSongs.value)[0].id).then((res) => {
     player.listNet.value = res;
   });
 });
+
+//刷新我喜欢
+function refreshLike(){
+  localStorage.setItem(`songListNet${toRaw(listSongs.value)[0].id}`,'')
+  getSongList(toRaw(listSongs.value)[0].id).then((res) => {
+    if(indexSongs.value==0 && choice.value==0) {
+      player.listNet.value = res;
+    }    
+  });
+}
 
 //fm
 function handleFM() {
@@ -122,7 +133,7 @@ function getDay() {
 //歌单
 function changeList(index) {
   if (indexSongs.value == index && choice.value == 0) return;
-  getSongList(listSongs.value[index]).then((res) => {
+  getSongList(toRaw(listSongs.value)[index].id).then((res) => {
     player.listNet.value = res;
     player.indexNet.value = 0
     indexSongs.value = index;
