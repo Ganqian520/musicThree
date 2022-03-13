@@ -36,36 +36,36 @@ import { Animator } from "@/util/Animator.js";
 
 const props = defineProps({
   list: Object,
-  index_:Object,
+  index_: Object,
 });
-const list_ = ref(null)
+const list_ = ref(null);
 
 function add(e, item) {
   player.listWant.push(toRaw(item));
-  let list = list_.value
+  let list = list_.value;
   let top = e.srcElement.offsetTop;
   let left = e.srcElement.offsetLeft;
   let tempDom = document.createElement("div");
   tempDom.style.left = `${left}px`;
   tempDom.style.top = top + "px";
-  tempDom.style.position = 'absolute'
-  tempDom.style.pointerEvents = 'none'
-  tempDom.style.fontSize = '25px'
+  tempDom.style.position = "absolute";
+  tempDom.style.pointerEvents = "none";
+  tempDom.style.fontSize = "25px";
   tempDom.innerHTML = "+";
   let animator = new Animator(1000); //传入动画时长1s
   animator.updateCb = (t) => {
-    t = t/1000
+    t = t / 1000;
     let vx = -100;
     let vy = -300;
     let a = 1500;
     let leftNew = left + vx * t;
     let topNew = top + vy * t + 0.5 * a * t ** 2;
-    tempDom.style.left = leftNew+'px'
-    tempDom.style.top = topNew+'px'
-  }
+    tempDom.style.left = leftNew + "px";
+    tempDom.style.top = topNew + "px";
+  };
   animator.endedCb = () => {
     list.removeChild(tempDom);
-  }
+  };
   animator.start();
   list.appendChild(tempDom);
 }
@@ -116,6 +116,9 @@ function play(index) {
           transform: translateY(-50%);
           top: 50%;
           font-size: 0.9rem;
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
           white-space: nowrap;
         }
       }
@@ -128,6 +131,8 @@ function play(index) {
           top: 50%;
           font-size: 0.6rem;
           color: rgba(0, 255, 255, 0.5);
+          overflow: hidden;
+          text-overflow: ellipsis;
           white-space: nowrap;
         }
       }

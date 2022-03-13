@@ -17,17 +17,17 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref ,defineAsyncComponent} from "vue";
 import three from "@/components/threeD/index.vue";
 import dou from "@/components/songList/dou.vue";
 import menugq from "@/components/index/menu.vue";
 import control from "@/components/index/control.vue";
 import netgq from "@/components/songList/net.vue";
 import lyric from "@/components/index/lyric.vue";
-import login from '@/components/index/login.vue'
 import {state} from '@/util/state.js'
-import effect from '@/components/index/effect.vue'
-import comments from '@/components/index/comments.vue'
+const effect = defineAsyncComponent(()=> import('@/components/index/effect.vue'))
+const login = defineAsyncComponent(()=> import('@/components/index/login.vue'))
+const comments = defineAsyncComponent(()=> import('@/components/index/comments.vue'))
 
 const isOpenMenu = ref(false)
 
@@ -56,14 +56,14 @@ state.isLogin.value = user ? true : false
   }
   .msg {
     position: absolute;
-    left: 20px;
+    left: 60px;
     top: 20px;
     font-size: 0.8rem;
   }
   .setting {
     position: absolute;
     left: 20px;
-    bottom: 20px;
+    top: 20px;
     font-size: 1.5rem;
   }
   .lyric_ {

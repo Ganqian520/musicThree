@@ -19,7 +19,7 @@
 <script setup>
 import { ref,onMounted,onBeforeUnmount} from "vue";
 import { Round } from "@/util/effect.js";
-// import {player} from '@/util/Player.js'
+import {player} from '@/util/Player.js'
 
 let round;
 
@@ -31,18 +31,24 @@ const isUserMove = ref(false);
 let raf = null
 
 onMounted(()=>{
-  round = new Round();
-  round.init();
   recursion()
 })
 
 onBeforeUnmount(()=>{
-  round.dispose()
+  round?.dispose()
   cancelAnimationFrame(raf)
 })
 
 function recursion() {
   raf = window.requestAnimationFrame(recursion);
+  if(!player.ctx){
+    return
+  }else {
+    if(!round){
+      round=new Round()
+      round.init()
+    }
+  }
   if (!isUserMove.value) {
     angle = angle + 0.05 > Math.PI * 2 ? 0 : angle + 0.05;
     x.value = Math.cos(angle) * R + R;

@@ -90,8 +90,8 @@ function draw() {
   ctx.font = "17px ''";
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
-  ctx.shadowColor = "rgba(0,255,255,1)";
-  ctx.shadowBlur = 40;
+  // ctx.shadowColor = "rgba(0,255,255,1)";
+  // ctx.shadowBlur = 40;
   for (let i = 0; i < list.length; i++) {
     ctx.fillText(list[i].content, w / 2, interval * i + y);
   }

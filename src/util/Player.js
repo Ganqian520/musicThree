@@ -25,7 +25,7 @@ class Player {
     this.ctx = new AudioContext()
     this.analyser = this.ctx.createAnalyser()
     this.source = this.ctx.createMediaElementSource(this.audio);
-    this.analyser.fftSize = 512
+    this.analyser.fftSize = 256
     this.source.connect(this.analyser).connect(this.ctx.destination)
 
     this.audio.ontimeupdate = () => {
