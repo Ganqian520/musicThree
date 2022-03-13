@@ -10,11 +10,5 @@ export default defineConfig({
     alias: {
       "@": resolve(__dirname, "src"),
     },
-  },
-  server: {
-    host: 'localhost',
-    port: 3000,
-    // 是否开启 https
-    https: false,
-  },
+  }
 })
