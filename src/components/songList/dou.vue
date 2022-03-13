@@ -5,6 +5,7 @@
         class="list_name"
         @mouseenter="() => (isOpenSongs = true)"
         @mouseleave="() => (isOpenSongs = false)"
+        @dblclick="refresh"
       >
         <span class="span">{{ listName }}</span>
         <div class="pop scroll_no_bar" v-if="isOpenSongs">
@@ -42,6 +43,14 @@ onMounted(() => {
     player.listDou.value = res;
   });
 });
+
+function refresh(){
+  localStorage.setItem('douList','')
+  getDou().then((res) => {
+    all = res;
+    player.listDou.value = res;   
+  });
+}
 
 function changeList(index) {
   listName.value = tags[index];

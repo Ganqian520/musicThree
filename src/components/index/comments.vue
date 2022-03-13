@@ -50,7 +50,7 @@ async function handleSongChange(music) {
   .longstr {
     height: 80px;
     line-height: 80px;
-    white-space: pre;
+    white-space: nowrap;
     position: absolute;
   }
 }

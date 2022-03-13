@@ -126,7 +126,7 @@ export function getRealUrl(id) {
         instance.get(`/song/url?id=${id}`).then(res => {
           let url = res.data.data[0].url.replace(/(http|https)/, 'https')
           resolve(url)
-        })
+        }).catch(err=>console.log(err))
       }
     }).catch(err => console.log(err))
   })
