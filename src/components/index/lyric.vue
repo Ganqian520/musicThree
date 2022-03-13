@@ -26,6 +26,7 @@ let indexShould = 0; //应该的序号
 onMounted(() => {
   initCtx();
 });
+
 watchEffect(() => {
   //监听歌曲切换
   handleSongChange(player.music.value);

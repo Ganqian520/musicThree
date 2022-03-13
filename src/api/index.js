@@ -3,7 +3,7 @@ import { state } from '@/util/state.js'
 
 export const instance = axios.create({
   baseURL: 'https://ganqian1.vercel.app/',
-  timeout: 8000,
+  timeout: 16000,
   withCredentials: true
 })
 

@@ -1,6 +1,5 @@
 <template>
   <div class="index">
-
     <three />
     <control class="control_" />
     <menugq class="menu_" @mouseleave="()=>isOpenMenu=false" 
@@ -10,6 +9,7 @@
     <login class="net_" v-if="!state.isLogin.value" />
     <lyric class="lyric_" />
     <effect class="effect_" v-if="state.isPanner.value" />
+    <comments class="comments_" v-if="state.isComments.value" />
 
     <span class="setting iconfont icon-shezhi" @mouseenter="()=>isOpenMenu = true"></span>
     <span class="msg">{{msgs[state.msg.value]}}</span>
@@ -27,6 +27,7 @@ import lyric from "@/components/index/lyric.vue";
 import login from '@/components/index/login.vue'
 import {state} from '@/util/state.js'
 import effect from '@/components/index/effect.vue'
+import comments from '@/components/index/comments.vue'
 
 const isOpenMenu = ref(false)
 
@@ -43,6 +44,11 @@ state.isLogin.value = user ? true : false
   height: 100vh;
   position: relative;
   display: flex;
+  .comments_ {
+    position: absolute;
+    left: 50px;
+    bottom: 200px;
+  }
   .effect_ {
     position: absolute;
     right: 50px;

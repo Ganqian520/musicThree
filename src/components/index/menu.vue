@@ -6,6 +6,12 @@
         <mswitch class="switch_" :flag="false" @change="handlePanner"/>
       </div>
     </div>
+    <div class="item">
+      <span class="tip">评论</span>
+      <div class="right">
+        <mswitch class="switch_" :flag="true" @change="(e)=>state.isComments.value = e"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -17,6 +23,7 @@ import {state} from '@/util/state.js'
 function handlePanner(e){
   state.isPanner.value = e
 }
+
 
 </script>
 

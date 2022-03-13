@@ -1,10 +1,20 @@
 import { instance } from "./index.js";
-import { timeTo, handleNetSongs} from '@/util/index.js'
+import { timeTo, handleNetSongs } from '@/util/index.js'
 import { state } from '@/util/state.js'
 import axios from 'axios'
-import { player } from "../util/Player.js";
 
 
+//获取评论
+export function getComments(id) {
+  return new Promise((resolve, reject) => {
+    instance.get('/comment/music', { params: { id } }).then(res => {
+      let str = res.data.hotComments.reduce((acc, v) => {
+        return acc + '\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0' + v.user.nickname + '：' + v.content
+      }, '')
+      resolve(str.replace('\n', ''))
+    }).catch(err => console.log(err))
+  })
+}
 
 //私人fm
 export function getFM() {
@@ -39,7 +49,7 @@ export function getLocalUrl(url) {
   return new Promise((resolve, reject) => {
     fetch(url, {
       responseType: 'blob'
-    }).then(res => res.blob()).then( async (res) => {
+    }).then(res => res.blob()).then(async (res) => {
       state.msg.value = 0
       let url_ = URL.createObjectURL(res)
       resolve(url_)
@@ -137,21 +147,19 @@ export function getDou() {
         data: JSON.stringify({ action: 'getDouYin' })
       }).then(res => {
         state.msg.value = 0
-        if (res.data?.data) {
-          let list = res.data.data.map(v => {
-            return {
-              name: v.name,
-              tag: v.tag,
-              author: v.res.musicAuthor,
-              time: v.res.musicDuration,
-              // img: v.res.coverUrl,
-              url: v.res.musicUrl,
-              platform: 'dou'
-            }
-          })
-          localStorage.setItem('douList', JSON.stringify(list))
-          resolve(list)
-        }
+        let list = res.data.data.map(v => {
+          return {
+            name: v.name,
+            tag: v.tag,
+            author: v.res.musicAuthor,
+            time: v.res.musicDuration,
+            // img: v.res.coverUrl,
+            url: v.res.musicUrl,
+            platform: 'dou'
+          }
+        })
+        localStorage.setItem('douList', JSON.stringify(list))
+        resolve(list)
       }).catch(err => {
         state.msg.value = 0
         console.log(err)
@@ -173,11 +181,8 @@ export async function send(phone) {
 //登录
 export async function login(phone, captcha) {
   return new Promise((resolve, reject) => {
-    // let phone = '19981490817'
-    // let password = '511623aA'
     instance.get('/login/cellphone', {
       params: { phone, captcha }
-      // params: { phone, password }
     }).then(res => {
       res = res.data
       let userNet = {
@@ -203,13 +208,10 @@ export function getSongList(id) {
       instance.get('/playlist/detail', {
         params: { id }
       }).then(res => {
-        console.log('请求歌曲列表', res)
-        if (res.status == 200 && res.data.code == 200) {
-          let list = handleNetSongs(res.data.playlist.tracks)
-          //我喜欢列表才缓存
-          id == JSON.parse(songsList)[0].id && localStorage.setItem(`songListNet${id}`, JSON.stringify(list))
-          resolve(list)
-        }
+        let list = handleNetSongs(res.data.playlist.tracks)
+        //我喜欢列表才缓存
+        id == JSON.parse(songsList)[0].id && localStorage.setItem(`songListNet${id}`, JSON.stringify(list))
+        resolve(list)
       }).catch(err => console.log(err))
     }
   })
