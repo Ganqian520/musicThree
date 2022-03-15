@@ -86,7 +86,7 @@ function play(index) {
   position: relative;
   .item {
     width: 100%;
-    height: 7vh;
+    height: 50px;
     display: flex;
     padding-top: 5px;
     padding-bottom: 5px;

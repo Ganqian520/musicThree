@@ -145,8 +145,8 @@ function changeList(index) {
 
 <style scoped lang="less">
 .net {
-  width: 25vw;
-  height: 50vh;
+  width: 350px;
+  height: 350px;
   display: flex;
   flex-direction: column;
   .span_ {
@@ -165,7 +165,7 @@ function changeList(index) {
     height: 40px;
     display: flex;
     .search {
-      width: 6vw;
+      width: 60px;
       height: 100%;
       .pop_search {
         width: 200px;
@@ -196,11 +196,11 @@ function changeList(index) {
       height: 100%;
     }
     .list_name {
-      width: 6vw;
+      width: 60px;
       height: 100%;
       .pop {
-        width: 15vw;
-        height: 20vw;
+        width: 150px;
+        height: 200px;
         overflow: auto;
         position: relative;
         z-index: 999;

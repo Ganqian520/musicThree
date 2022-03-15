@@ -103,8 +103,8 @@ function play(){
 .control {
   display: flex;
   flex-direction: column;
-  width: 20vw;
-  height: 15vh;
+  width: 300px;
+  height: 100px;
   .song {
     width: 100%;
     flex: 1;

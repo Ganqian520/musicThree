@@ -44,12 +44,12 @@ async function handleSongChange(music) {
 <style scoped lang="less">
 .comments {
   width: 500px;
-  height: 80px;
+  height: 60px;
   display: flex;
   position: relative;
   .longstr {
-    height: 80px;
-    line-height: 80px;
+    height: 60px;
+    line-height: 60px;
     white-space: nowrap;
     position: absolute;
   }

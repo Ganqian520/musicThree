@@ -9,10 +9,8 @@ export class Line {
   inLine;
   midLines = []; //中间线模型集合
   points = []; //线需要的点集
+  lineGroup = new THREE.Group()
 
-  constructor(scene){
-    this.scene = scene
-  }
 
   update() {
     let arrOut = [];
@@ -58,7 +56,7 @@ export class Line {
       );
       let line = new THREE.Line(geometry, materialLine);
       this.midLines.push(line);
-      this.scene.add(line);
+      this.lineGroup.add(line);
     });
     let geometryOut = new THREE.BufferGeometry();
     let geometryIn = new THREE.BufferGeometry();
@@ -72,7 +70,7 @@ export class Line {
     );
     this.outLine = new THREE.LineLoop(geometryOut, materialLine);
     this.inLine = new THREE.LineLoop(geometryIn, materialLine);
-    this.scene.add(this.outLine, this.inLine);
+    this.lineGroup.add(this.outLine, this.inLine);
   }
 
 }

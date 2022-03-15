@@ -58,6 +58,7 @@ function recursion() {
 }
 
 function mousemove(e) {
+  if(!round) return
   isUserMove.value = true;
   x.value = e.offsetX;
   y.value = e.offsetY;

@@ -57,11 +57,12 @@ function init() {
 
   all = new THREE.Group()
   scene.add(all)
-  line = new Line(all)
+  line = new Line()
   line.init()
-  sphere = new Sphere(all)
+  sphere = new Sphere()
   sphere.init()
-  traingle = new Triangles(scene)
+  traingle = new Triangles()
+  scene.add(traingle.traingleGroup)
   traingle.init()
 }
 //递归
@@ -71,8 +72,16 @@ function animate() {
   orbitControl.update()
   // stats.update()
   all.rotateY(0.003)
-  sphere.update()
-  line.update()
+  if(!player.isPlay.value && all.children.length==2){
+    all.children = []
+  }else if(player.isPlay.value){
+    if(all.children.length==0){
+      all.add(sphere.sphereGroup)
+      all.add(line.lineGroup)
+    }
+    sphere.update()
+    line.update()
+  }  
   traingle.update()
   // composer.render();
   renderer.render(scene,camera)

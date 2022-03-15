@@ -46,14 +46,12 @@ class Triangle {
 export class Triangles {
   intervelCount = 0 //加到60说明过了一秒
   traingles = []; //三角形
-  constructor(scene) {
-    this.scene = scene
-  }
+  traingleGroup = new THREE.Group()
   init() {
     for (let i = 0; i < 10; i++) {
       let triangle = new Triangle();
       this.traingles.push(triangle);
-      this.scene.add(triangle.loopLine);
+      this.traingleGroup.add(triangle.loopLine);
     }
   }
   update() {
@@ -62,7 +60,7 @@ export class Triangles {
       for (let i = 0; i < 3; i++) {
         let triangle = new Triangle();
         this.traingles.push(triangle);
-        this.scene.add(triangle.loopLine);
+        this.traingleGroup.add(triangle.loopLine);
       }
       this.intervelCount = 0
     }
@@ -70,7 +68,7 @@ export class Triangles {
       let v = this.traingles[i];
       v.update();
       if (v.distance > v.lifeDistance) {
-        this.scene.remove(v.loopLine);
+        this.traingleGroup.remove(v.loopLine);
         v.geometry.dispose();
         v.material.dispose()
         this.traingles.splice(i--, 1);

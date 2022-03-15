@@ -8,7 +8,8 @@
   import {ref,defineProps,defineEmits} from 'vue'
 
   const props = defineProps({
-    flag:Boolean
+    flag:Boolean,
+    index:Number
   })
 
   const emits = defineEmits(['change'])
@@ -17,7 +18,8 @@
 
   function click(){
     flag.value = !flag.value
-    emits('change',flag.value)
+    let obj = {flag:flag.value,index:props.index}
+    emits('change',obj)
   }
 </script>
 

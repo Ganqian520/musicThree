@@ -3,15 +3,10 @@ import { player } from "../../util/Player.js";
 import { R, N, A, AXES, FFT, COLOR, H } from './const.js'
 
 export class Sphere {
-  barGroup;
-  scene;
-
-  constructor(scene) {
-    this.scene = scene
-  }
+  sphereGroup;
 
   init() {
-    this.barGroup = new THREE.Group();
+    this.sphereGroup = new THREE.Group();
     for (let i = 0; i < N; i++) {
       let minGroup = new THREE.Group();
       let box = new THREE.SphereGeometry(A);
@@ -26,13 +21,12 @@ export class Sphere {
       let x = Math.sin(angle) * R;
       let z = Math.cos(angle) * R;
       minGroup.position.set(x, H, z);
-      this.barGroup.add(minGroup);
+      this.sphereGroup.add(minGroup);
     }
-    this.scene.add(this.barGroup);
   }
 
   update() {
-    this.barGroup.children.forEach((v, i) => {
+    this.sphereGroup.children.forEach((v, i) => {
       v.position.y = H + player.fft[i] * (FFT / 256);
     });
   }

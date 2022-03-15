@@ -62,8 +62,8 @@ function changeList(index) {
 
 <style scoped lang="less">
 .dou {
-  width: 25vw;
-  height: 50vh;
+  width: 350px;
+  height: 350px;
   display: flex;
   flex-direction: column;
   .head {
