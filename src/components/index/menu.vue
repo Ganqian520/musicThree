@@ -14,6 +14,10 @@
         <mswitch class="switch_" :flag="state.show.value[attr[i]]" :index="i" @change="showChange"/>
       </div>
     </div>
+
+    <span class="msg">
+      如有问题欢迎发送到邮箱：2282227679@qq.com
+    </span>
   </div>
 </template>
 
@@ -22,7 +26,7 @@ import { ref,toRaw } from "vue";
 import mswitch from '@/components/widgets/switch.vue'
 import {state} from '@/util/state.js'
 
-let list = ['128乐器','环绕音效','3D背景','抖音列表','网易云列表','歌词','评论','播放控制']
+let list = ['钢琴','环绕音效','3D背景','抖音列表','网易云列表','歌词','评论','播放控制']
 let attr = ['piano','effect','three','dou','net','lyric','comments','control']
 
 function showChange(e){
@@ -39,8 +43,7 @@ function showChange(e){
   display: flex;
   flex-direction: column;
   background-color: rgb(37, 37, 37);
-  color: black;
-  text-shadow: none;
+  position: relative;
   .item {
     display: flex;
     height: 6vh;
@@ -58,6 +61,14 @@ function showChange(e){
         margin: auto;
       }
     }
+  }
+  .msg {
+    margin: 10px;
+    position: absolute;
+    bottom: 0px;
+    color: rgba(0,255,255,0.5);
+    font-size: 0.7rem;
+    user-select: text;
   }
 }
 </style>

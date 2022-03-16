@@ -13,7 +13,7 @@
         min="1" max="100" step="0.1"
         @input="input"
         @change="change"
-        :style="{background: `linear-gradient(to right,#00ffff 0%,#00ffff ${value}%,rgba(0,255,255,0.4) ${value}%,rgba(0,255,255,0.4) 100%)`}" />
+        :style="{background: `linear-gradient(to right,rgba(0,255,255,1) 0%,rgba(0,255,255,1) ${value}%,rgba(0,255,255,0.4) ${value}%,rgba(0,255,255,0.4) 100%)`}" />
       </div>
       <div class="time">
         <span class="time_span">{{rightTime}}</span>
@@ -71,6 +71,7 @@ function addLike(){
 
 //进度条改变中
 function input(e){
+  if(!player.music.value.name) return
   value.value = e.target.value
   player.isUserSlide = true
   leftTime.value = timeTo(Math.floor(player.audio.duration*value.value/100))
@@ -78,6 +79,7 @@ function input(e){
 
 //进度条改变后
 function change(e){
+  if(!player.music.value.name) return
   value.value = e.target.value
   player.isUserSlide = false
   let time = player.audio.duration*value.value/100
@@ -133,18 +135,18 @@ function play(){
       display: flex;
       .range {
         width: 100%;
-        height: 3px;
+        height: 2px;
         margin: auto;
-        border-radius: 1.5px;
+        border-radius: 1px;
         -webkit-appearance: none;
         background:none;
       }
       .range::-webkit-slider-thumb {
         -webkit-appearance: none;
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
-        background: #00ffff;
+        background: rgba(0,255,255,1);
       }
     }
   }
@@ -155,6 +157,15 @@ function play(){
       flex: 1;
       height: 100%;
       display: flex;
+      .icon-shunxubofang {
+        font-size: 13px;
+      }
+      .icon-qingchu {
+        font-size: 14px ;
+      }
+      .icon-pause {
+        font-size: 18px;
+      }
       .icon{
         margin: auto;
       }

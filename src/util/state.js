@@ -5,7 +5,7 @@ export const state = {
   msg: ref(0), //提示文字的序号
   isOpenAnchor: ref(false),//定位器
   show: ref({
-    effct: true,
+    effect: true,
     comments: true,
     piano: true,
     dou: true,
@@ -17,11 +17,11 @@ export const state = {
 }
 
 export const position = ref({
-  comments: { x: 546, y: 302 },
-  control: { x: 378, y: 571 },
-  dou: { x: 1168, y: 20 },
-  effect: { x: 59, y: 487 },
-  lyric: { x: 591, y: 25 },
-  net: { x: 100, y: 20 },
-  piano: { x: 789, y: 424 },
+  comments: { x: 470, y: 323 },
+  control: { x: 874, y: 595 },
+  dou: { x: 1094, y: 35 },
+  effect: { x: 1266, y: 494 },
+  lyric: { x: 584, y: 35 },
+  net: { x: 100, y: 35 },
+  piano: { x: 36, y: 425 },
 })

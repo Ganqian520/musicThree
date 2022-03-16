@@ -19,7 +19,7 @@ export function timeTo(e) {
     min = min < 10 ? `0${min}` : min;
     second = second < 10 ? `0${second}` : second;
     return `${min}:${second}`;
-  } else {
+  } else  {
     return parseInt(e.slice(0, 2)) * 60 + parseInt(e.slice(3, 5));
   }
 }

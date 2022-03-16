@@ -7,13 +7,15 @@
         @mouseleave="() => (isOpenSongs = false)"
         @dblclick="refreshLike"
       >
-        <div class="span_">
-          <span
-            class="center"
+        <!-- <div class="span_"> -->
+          <div
+            class="first"
             :style="{ fontWeight: choice == 0 ? '900' : '400' }"
-            >{{ listSongs.length != 0 && listSongs[indexSongs].name }}</span
+            >{{
+              listSongs.length != 0 ? listSongs[indexSongs].name : "我喜欢"
+            }}</div
           >
-        </div>
+        <!-- </div> -->
         <div class="pop scroll_no_bar" v-if="isOpenSongs">
           <div
             class="name black_text hover"
@@ -65,7 +67,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted,toRaw } from "vue";
+import { ref, onMounted, toRaw } from "vue";
 import { timeTo } from "@/util/index.js";
 import {
   getSongList,
@@ -93,12 +95,12 @@ onMounted(async () => {
 });
 
 //刷新我喜欢
-function refreshLike(){
-  localStorage.setItem(`songListNet${toRaw(listSongs.value)[0].id}`,'')
+function refreshLike() {
+  localStorage.setItem(`songListNet${toRaw(listSongs.value)[0].id}`, "");
   getSongList(toRaw(listSongs.value)[0].id).then((res) => {
-    if(indexSongs.value==0 && choice.value==0) {
+    if (indexSongs.value == 0 && choice.value == 0) {
       player.listNet.value = res;
-    }    
+    }
   });
 }
 
@@ -106,8 +108,8 @@ function refreshLike(){
 function handleFM() {
   getFM().then((res) => {
     player.listNet.value = res;
-    player.indexNet.value = 0
-    choice.value = 2
+    player.indexNet.value = 0;
+    choice.value = 2;
   });
 }
 
@@ -115,7 +117,7 @@ function handleFM() {
 function search() {
   searchNet(keywords.value).then((res) => {
     player.listNet.value = res;
-    player.indexNet.value = 0
+    player.indexNet.value = 0;
     isOpenSearch.value = false;
     choice.value = 3;
   });
@@ -125,7 +127,7 @@ function search() {
 function getDay() {
   getNetDay().then((res) => {
     player.listNet.value = res;
-    player.indexNet.value = 0
+    player.indexNet.value = 0;
     choice.value = 1;
   });
 }
@@ -135,7 +137,7 @@ function changeList(index) {
   if (indexSongs.value == index && choice.value == 0) return;
   getSongList(toRaw(listSongs.value)[index].id).then((res) => {
     player.listNet.value = res;
-    player.indexNet.value = 0
+    player.indexNet.value = 0;
     indexSongs.value = index;
     isOpenSongs.value = false;
     choice.value = 0;
@@ -164,6 +166,11 @@ function changeList(index) {
     width: 100%;
     height: 40px;
     display: flex;
+    .first {
+      width: 150px;
+      height: 40px;
+      line-height: 40px;
+    }
     .search {
       width: 60px;
       height: 100%;
@@ -196,7 +203,7 @@ function changeList(index) {
       height: 100%;
     }
     .list_name {
-      width: 60px;
+      width: 150px;
       height: 100%;
       .pop {
         width: 150px;

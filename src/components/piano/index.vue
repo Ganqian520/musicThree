@@ -311,29 +311,31 @@ function calKeyTip(diao) {
     "#7",
   ];
   for (let i = 0; i < 63; i++) {
-    let qutient = Math.floor(i / 7);
+    let quotient = Math.floor(i / 7);
     let remainder = i % 7;
     let arr1 = [0, 2, 4, 5, 7, 9, 11];
-    let index = qutient * 12 + arr1[remainder] + diao;
+    let index = quotient * 12 + arr1[remainder] + diao;
     remainder = index % 12;
+    quotient = Math.floor(index/12)
     if (diao > 11) remainder += 11;
     whites.value[i] = {
       index,
-      dot: qutient - 4,
+      dot: quotient - 4,
       tip: arr[remainder],
       isActive: ref(false),
     };
   }
   for (let i = 0; i < 45; i++) {
-    let qutient = Math.floor(i / 5);
+    let quotient = Math.floor(i / 5);
     let remainder = i % 5;
     let arr1 = [1, 3, 6, 8, 10];
-    let index = qutient * 12 + arr1[remainder] + diao;
+    let index = quotient * 12 + arr1[remainder] + diao;
     remainder = index % 12;
+    quotient = Math.floor(index/12)
     if (diao > 11) remainder += 11;
     blacks.value[i] = {
       index,
-      dot: qutient - 4,
+      dot: quotient - 4,
       tip: arr[remainder],
       isActive: ref(false),
     };
@@ -371,10 +373,10 @@ function diaoChange(index) {
       text-align: center;
     }
     .diao_ {
-      width: 50px;
+      width: 200px;
       height: 50px;
       .diao {
-        width: 50px;
+        width: 200px;
         height: 50px;
         line-height: 50px;
         text-align: center;
@@ -485,9 +487,13 @@ function diaoChange(index) {
     .wb::-webkit-scrollbar {
       width: 0px;
       height: 20px;
+      background-color: rgba(0,255,255,0.2);
+      border-bottom-right-radius: 10px;
+      border-bottom-left-radius: 10px;
     }
     .wb::-webkit-scrollbar-thumb {
       background-color: rgba(0, 255, 255, 0.5);
+      border-radius: 10px;
     }
     .keyword {
       display: flex;

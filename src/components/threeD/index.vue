@@ -151,7 +151,7 @@ function initThree() {
   scene = new THREE.Scene();
   scene.background = new THREE.CubeTextureLoader().load(getImg());
   camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 1, 10000);
-  camera.position.set(0, 20, 70);
+  camera.position.set(-80, 20, -50);
   camera.lookAt(0, 0, 0);
   let axesHelper = new THREE.AxesHelper(AXES);
   // scene.add(axesHelper);

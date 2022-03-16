@@ -14,7 +14,7 @@
     </div>
     
     <div :class="['anchor_',state.isOpenAnchor.value && 'bg']" :style="{left:position.net.x+'px',top:position.net.y+'px'}">
-      <netgq v-if="state.show.value.net" />
+      <netgq v-if="state.show.value.net && state.isLogin.value" />
       <anchor from="net" />
     </div>
     
@@ -39,7 +39,7 @@
     </div>
 
 
-    <login class="net_" v-if="!state.isLogin.value" />
+    <login class="login_" v-if="!state.isLogin.value" />
 
     <menugq class="menu_" @mouseleave="()=>isOpenMenu=false" 
       :style="{transform: isOpenMenu ? 'translate(0vw,0)' : 'translate(-15vw,0)'}"/>
@@ -66,9 +66,9 @@ const piano = defineAsyncComponent(()=>import('@/components/piano/index.vue'))
 
 import {state,position} from '@/util/state.js'
 
-const isOpenMenu = ref(false)
+const isOpenMenu = ref(true)
 
-const msgs = ['','不要乱点，正在加载中......']
+const msgs = ['','拼命加载中...']
 
 let user = localStorage.getItem('user')
 state.isLogin.value = user ? true : false
@@ -108,6 +108,11 @@ positionStr ? position.value = JSON.parse(positionStr) : null
     position: absolute;
     z-index: 3;
     transition: transform 300ms linear;
+  }
+  .login_ {
+    position: absolute;
+    left: 100px;
+    top: 100px;
   }
 }
 </style>
