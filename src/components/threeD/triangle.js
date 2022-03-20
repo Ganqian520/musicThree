@@ -2,16 +2,14 @@ import * as THREE from 'three'
 
 
 class Triangle {
-  speedT = range(0.4, 0.6) //移动速度
-  speedR = 0.01 //旋转速度
+  speedT = range(0.1, 0.2) //移动速度
   distance = 0 //当前移动距离
-  lifeDistance = 500 //消失时的距离
+  lifeDistance = 300 //消失时的距离
   loopLine = null //模型
-  look = new THREE.Vector3(0, 1, 0)
 
   constructor() {
-    const MAX = 5 //随机点距离最大值
-    const R = 40 //圆环半径
+    const MAX = 1 //随机点距离最大值
+    const R = 5 //圆环半径
     this.angle = Math.random() * Math.PI * 2  //角度
     this.x = Math.cos(this.angle) * R  //初始坐标
     this.y = 0

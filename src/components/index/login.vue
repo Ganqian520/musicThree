@@ -46,7 +46,7 @@ function login_() {
   if(!reg.test(phone.value) || captcha.value=='') return
   isCanLogin.value = false
   login( phone.value, captcha.value).catch(err=>{
-    isCanLogin = true
+    isCanLogin.value = true
   })
 }
 </script>

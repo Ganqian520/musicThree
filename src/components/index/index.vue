@@ -1,40 +1,40 @@
 <template>
   <div class="index">
-    <three class="three_" v-if="state.show.value.three" />
+    <three class="three_" v-if="show.three" />
 
     
-    <div :class="['anchor_',state.isOpenAnchor.value && 'bg']" :style="{left:position.control.x+'px',top:position.control.y+'px'}">
-      <control v-if="state.show.value.control" />
+    <div class="anchor_" v-if="show.control" :style="{left:position.control.x+'px',top:position.control.y+'px'}">
+      <control />
       <anchor from='control' />
     </div>
     
-    <div :class="['anchor_',state.isOpenAnchor.value && 'bg']" :style="{left:position.dou.x+'px',top:position.dou.y+'px'}">
-      <dou v-if="state.show.value.dou" />
+    <div class="anchor_" v-if="show.dou" :style="{left:position.dou.x+'px',top:position.dou.y+'px'}">
+      <dou />
       <anchor from="dou" />
     </div>
     
-    <div :class="['anchor_',state.isOpenAnchor.value && 'bg']" :style="{left:position.net.x+'px',top:position.net.y+'px'}">
-      <netgq v-if="state.show.value.net && state.isLogin.value" />
+    <div class="anchor_" v-if="show.net && state.isLogin.value" :style="{left:position.net.x+'px',top:position.net.y+'px'}">
+      <netgq />
       <anchor from="net" />
     </div>
     
-    <div :class="['anchor_',state.isOpenAnchor.value && 'bg']" :style="{left:position.lyric.x+'px',top:position.lyric.y+'px'}">
-      <lyric v-if="state.show.value.lyric" />
+    <div class="anchor_" v-if="show.lyric" :style="{left:position.lyric.x+'px',top:position.lyric.y+'px'}">
+      <lyric />
       <anchor from="lyric" />
     </div>
     
-    <div :class="['anchor_',state.isOpenAnchor.value && 'bg']" :style="{left:position.effect.x+'px',top:position.effect.y+'px'}">
-      <effect  v-if="state.show.value.effect" />
+    <div class="anchor_" v-if="show.effect" :style="{left:position.effect.x+'px',top:position.effect.y+'px'}">
+      <effect />
       <anchor from="effect" />
     </div>
     
-    <div :class="['anchor_',state.isOpenAnchor.value && 'bg']" :style="{left:position.comments.x+'px',top:position.comments.y+'px'}">
-      <comments v-if="state.show.value.comments" />
+    <div class="anchor_" v-if="show.comments" :style="{left:position.comments.x+'px',top:position.comments.y+'px'}">
+      <comments />
       <anchor from="comments" />
     </div>
     
-    <div :class="['anchor_',state.isOpenAnchor.value && 'bg']" :style="{left:position.piano.x+'px',top:position.piano.y+'px'}">
-      <piano v-if="state.show.value.piano" />
+    <div class="anchor_" v-if="show.piano" :style="{left:position.piano.x+'px',top:position.piano.y+'px'}">
+      <piano />
       <anchor from="piano" />
     </div>
 
@@ -42,7 +42,7 @@
     <login class="login_" v-if="!state.isLogin.value" />
 
     <menugq class="menu_" @mouseleave="()=>isOpenMenu=false" 
-      :style="{transform: isOpenMenu ? 'translate(0vw,0)' : 'translate(-15vw,0)'}"/>
+      :style="{transform: isOpenMenu ? 'translate(0px,0)' : 'translate(-200px,0)'}"/>
 
     <span class="setting iconfont icon-shezhi" @mouseenter="()=>isOpenMenu=true"></span>
     <span class="msg">{{msgs[state.msg.value]}}</span>
@@ -64,9 +64,9 @@ const login = defineAsyncComponent(()=> import('@/components/index/login.vue'))
 const comments = defineAsyncComponent(()=> import('@/components/index/comments.vue'))
 const piano = defineAsyncComponent(()=>import('@/components/piano/index.vue'))
 
-import {state,position} from '@/util/state.js'
+import {state,position,show} from '@/util/state.js'
 
-const isOpenMenu = ref(true)
+const isOpenMenu = ref(false)
 
 const msgs = ['','拼命加载中...']
 
@@ -88,7 +88,6 @@ positionStr ? position.value = JSON.parse(positionStr) : null
   .anchor_ {
     position: absolute;
     z-index: 1;
-    box-sizing: border-box;
   }
   .msg {
     position: absolute;

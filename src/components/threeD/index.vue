@@ -7,12 +7,12 @@ import { onMounted, ref } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-import { GUI } from "three/examples/jsm/libs/lil-gui.module.min";
+// import { GUI } from "three/examples/jsm/libs/lil-gui.module.min";
 
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
-import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
-import Stats from "three/examples/jsm/libs/stats.module.js";
+// import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+// import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+// import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
+// import Stats from "three/examples/jsm/libs/stats.module.js";
 
 import { player } from "@/util/Player.js";
 import {Line} from '@/components/threeD/Line.js'

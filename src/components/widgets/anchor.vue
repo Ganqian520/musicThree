@@ -1,6 +1,5 @@
 <template>
-  <div class="anchor bg" v-if="state.isOpenAnchor.value">
-    <span class="icon iconfont icon-si-glyph-anchor" @mousedown="down"></span>
+  <div class="anchor bg" v-if="state.isOpenAnchor.value" @mousedown="down">
   </div>
 </template>
 
@@ -24,7 +23,7 @@ function up() {
   isDown = false;
   document.body.onmousemove = null;
   document.body.onmouseup = null;
-  localStorage.setItem("position", JSON.stringify(toRaw(position.value)));
+  localStorage.setItem("position", JSON.stringify(position.value));
 }
 </script>
 
@@ -32,13 +31,10 @@ function up() {
 .anchor {
   position: absolute;
   left: 0px;
-  top: -30px;
-  width: 30px;
-  height: 30px;
-  display: flex;
+  top: 0px;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
-  .icon {
-    margin: auto;
-  }
+  z-index: 999;
 }
 </style>

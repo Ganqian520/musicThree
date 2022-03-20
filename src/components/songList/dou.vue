@@ -48,7 +48,9 @@ function refresh(){
   localStorage.setItem('douList','')
   getDou().then((res) => {
     all = res;
-    player.listDou.value = res;   
+    if(listName.value==tags[0]){
+      player.listDou.value = res;
+    } 
   });
 }
 

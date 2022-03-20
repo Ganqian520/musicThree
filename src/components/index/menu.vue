@@ -11,7 +11,7 @@
     <div class="item" v-for="(v,i) in list" :key="i">
       <span class="tip">{{v}}</span>
       <div class="right">
-        <mswitch class="switch_" :flag="state.show.value[attr[i]]" :index="i" @change="showChange"/>
+        <mswitch class="switch_" :flag="show[attr[i]]" :index="i" @change="showChange"/>
       </div>
     </div>
 
@@ -24,21 +24,20 @@
 <script setup>
 import { ref,toRaw } from "vue";
 import mswitch from '@/components/widgets/switch.vue'
-import {state} from '@/util/state.js'
+import {state,show} from '@/util/state.js'
 
 let list = ['钢琴','环绕音效','3D背景','抖音列表','网易云列表','歌词','评论','播放控制']
 let attr = ['piano','effect','three','dou','net','lyric','comments','control']
 
 function showChange(e){
-  state.show.value[attr[e.index]] = e.flag
-  localStorage.setItem('show',JSON.stringify(toRaw(state.show.value)))
+  show.value[attr[e.index]] = e.flag
+  localStorage.setItem('show',JSON.stringify(toRaw(show.value)))
 }
-
 </script>
 
 <style scoped lang="less">
 .menu {
-  width: 15vw;
+  width: 200px;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -46,12 +45,12 @@ function showChange(e){
   position: relative;
   .item {
     display: flex;
-    height: 6vh;
-    line-height: 6vh;
+    height: 45px;
+    line-height: 45px;
     padding-left: 10px;
     .tip {
       flex: 3;
-      line-height: 6vh;
+      line-height: 45px;
     }
     .right{
       flex: 1;
