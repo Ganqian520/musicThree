@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, toRaw } from "vue";
+import { ref, toRaw } from "vue";
 import { position ,state} from "@/util/state.js";
 const props = defineProps({
   from: String,
