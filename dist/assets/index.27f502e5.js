@@ -1,4 +1,4 @@
-var xc=Object.defineProperty;var vc=(s,e,t)=>e in s?xc(s,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):s[e]=t;var yt=(s,e,t)=>(vc(s,typeof e!="symbol"?e+"":e,t),t);import{p as Dt}from"./Player.9433a9ad.js";import"./index.e60411af.js";import{r as yc,k as Mc,o as bc,c as wc}from"./vendor.cf001842.js";import"./request.9317ab38.js";var Sc="./assets/back.3e30294c.jpg",Ec="./assets/bottom.283b4be8.jpg",Tc="./assets/front.b9483333.jpg",Ac="./assets/left.d7e0879d.jpg",Cc="./assets/right.80884b70.jpg",Lc="./assets/top.8b10a0eb.jpg";/**
+var xc=Object.defineProperty;var vc=(s,e,t)=>e in s?xc(s,e,{enumerable:!0,configurable:!0,writable:!0,value:t}):s[e]=t;var yt=(s,e,t)=>(vc(s,typeof e!="symbol"?e+"":e,t),t);import{p as Dt}from"./Player.7cae2b92.js";import"./index.e650e6f2.js";import{r as yc,k as Mc,o as bc,c as wc}from"./vendor.cf001842.js";import"./request.a80be9c3.js";var Sc="./assets/back.3e30294c.jpg",Ec="./assets/bottom.283b4be8.jpg",Tc="./assets/front.b9483333.jpg",Ac="./assets/left.d7e0879d.jpg",Cc="./assets/right.80884b70.jpg",Lc="./assets/top.8b10a0eb.jpg";/**
  * @license
  * Copyright 2010-2022 Three.js Authors
  * SPDX-License-Identifier: MIT

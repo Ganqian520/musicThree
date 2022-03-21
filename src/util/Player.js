@@ -8,19 +8,22 @@ class Player {
   audio = document.createElement('audio')
   fft = new Uint8Array(128)
   analyser = null
+
   isPlay = ref(false) //是否播放中
   music = ref({}) //当前音乐，id,name等
-  index = 0 //当前播放序号
   listDou = ref([])  //播放队列
   listNet = ref([])
-  listWant = [] //插队播放
   indexNet = ref(0) //方便列表的定位
   indexDou = ref(0)
   updateNetCb = null //网易云歌词进度回调
   updateProgressCb = null //进度条回调
+  order = ref(0)  //{ sequential: 0, random: 1, single: 2 } //播放顺序
+
+  index = 0 //当前播放序号
+  listWant = [] //插队队列
   isUserSlide = false //用户是否在滑动进度条
-  order = 0  //{ sequential: 0, random: 1, single: 2 } //播放顺序
   
+
   init() {
     this.ctx = new AudioContext()
     this.analyser = this.ctx.createAnalyser()
@@ -80,7 +83,7 @@ class Player {
 
   last() {
     let list = this.music.value.platform == 'net' ? this.listNet.value : this.listDou.value
-    this.index = this.index - 1 < 0 ? 0 : this.index-1
+    this.index = this.index - 1 < 0 ? 0 : this.index - 1
     this.start(list[this.index], this.index)
   }
 
