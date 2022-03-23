@@ -76,6 +76,9 @@ state.isLogin.value = user ? true : false
 let positionStr = localStorage.getItem('position')
 positionStr ? position.value = JSON.parse(positionStr) : null
 
+let show_ = localStorage.getItem('show')
+show_ ? show.value = JSON.parse(show_) : null
+
 </script>
 
 <style scoped lang="less">

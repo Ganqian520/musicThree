@@ -221,6 +221,7 @@ export function getSongsList() {
   return new Promise((resolve, reject) => {
     let uid = JSON.parse(localStorage.getItem('user')).uid
     let str = localStorage.getItem(`songsListNet${uid}`)
+    // str = ""
     if (str) {
       resolve(JSON.parse(str))
     } else {
@@ -228,6 +229,7 @@ export function getSongsList() {
         params: { uid }
       }).then(res => {
         res = res.data
+        // console.log(res)
         let list = [{ id: res.playlist[0].id, name: '我喜欢' }]
         for (let i = 1; i < res.playlist.length; i++) {
           if (!res.playlist[i].subscribed) {

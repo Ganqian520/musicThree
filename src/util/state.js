@@ -14,7 +14,7 @@ export const show = ref({
   net: true,
   lyric: true,
   control: true,
-  three: false,
+  three: true,
 })
 
 export const position = ref({
