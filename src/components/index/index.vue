@@ -46,11 +46,14 @@
 
     <span class="setting iconfont icon-shezhi" @mouseenter="()=>isOpenMenu=true"></span>
     <span class="msg">{{msgs[state.msg.value]}}</span>
+    <!-- <fft style="backgroundColor:white;position:absolute" /> -->
   </div>
 </template>
 
 <script setup>
 import { ref ,defineAsyncComponent} from "vue";
+
+// import fft from "./fft.vue"
 
 import menugq from "@/components/index/menu.vue";
 import anchor from '@/components/widgets/anchor.vue'
@@ -87,7 +90,6 @@ show_ ? show.value = JSON.parse(show_) : null
   height: 100vh;
   position: relative;
   display: flex;
-
   .anchor_ {
     position: absolute;
     z-index: 1;

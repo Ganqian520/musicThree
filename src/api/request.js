@@ -39,7 +39,7 @@ export function addNetLike(id) {
   return new Promise((resolve, reject) => {
     instance.get('/like', {
       params: { id }
-    }).catch(err => console.log(err))
+    }).then(res=>console.log(res.data)).catch(err => console.log(err))
   })
 }
 
@@ -208,6 +208,7 @@ export function getSongList(id) {
       instance.get('/playlist/detail', {
         params: { id }
       }).then(res => {
+        console.log(res.data)
         let list = handleNetSongs(res.data.playlist.tracks)
         //我喜欢列表才缓存
         id == JSON.parse(songsList)[0].id && localStorage.setItem(`songListNet${id}`, JSON.stringify(list))
@@ -221,7 +222,6 @@ export function getSongsList() {
   return new Promise((resolve, reject) => {
     let uid = JSON.parse(localStorage.getItem('user')).uid
     let str = localStorage.getItem(`songsListNet${uid}`)
-    // str = ""
     if (str) {
       resolve(JSON.parse(str))
     } else {
@@ -229,7 +229,6 @@ export function getSongsList() {
         params: { uid }
       }).then(res => {
         res = res.data
-        // console.log(res)
         let list = [{ id: res.playlist[0].id, name: '我喜欢' }]
         for (let i = 1; i < res.playlist.length; i++) {
           if (!res.playlist[i].subscribed) {

@@ -17,7 +17,7 @@ class Player {
   indexDou = ref(0)
   updateNetCb = null //网易云歌词进度回调
   updateProgressCb = null //进度条回调
-  order = ref(0)  //{ sequential: 0, random: 1, single: 2 } //播放顺序
+  order = ref(1)  //{ sequential: 0, random: 1, single: 2 } //播放顺序
 
   index = 0 //当前播放序号
   listWant = [] //插队队列
@@ -66,13 +66,13 @@ class Player {
   next() {
     if (this.listWant.length == 0) {
       let list = this.music.value.platform == 'net' ? this.listNet.value : this.listDou.value
-      if (this.order == 0) {
+      if (this.order.value == 0) {
         this.index = this.index < list.length - 1 ? this.index + 1 : 0
         this.start(list[this.index], this.index)
-      } else if (this.order == 1) {
+      } else if (this.order.value == 1) {
         this.index = Math.floor(Math.random() * list.length - 1)
         this.start(list[this.index], this.index)
-      } else if (this.order == 2) {
+      } else if (this.order.value == 2) {
         this.audio.play()
       }
     } else {
