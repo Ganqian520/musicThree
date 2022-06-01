@@ -8,11 +8,11 @@ export const state = {
 
 export const show = ref({
   effect: true,
-  comments: true,
+  comments: false,
   piano: true,
   dou: true,
   net: true,
-  lyric: true,
+  lyric: false,
   control: true,
   three: true,
 })
