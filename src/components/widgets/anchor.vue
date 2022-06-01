@@ -1,28 +1,47 @@
 <template>
-  <div class="anchor bg" v-if="state.isOpenAnchor.value" @mousedown="down">
+  <div
+    class="anchor"
+    v-if="show[props.from]"
+    :style="{
+      left: position[props.from].x + 'px',
+      top: position[props.from].y + 'px',
+    }"
+  >
+    <slot class="content" />
+    <div
+      class="mask bg"
+      v-if="state.isOpenAnchor.value"
+      @touchstart="down"
+    ></div>
   </div>
 </template>
 
 <script setup>
 import { ref, toRaw } from "vue";
-import { position ,state} from "@/util/state.js";
+import { position, state, show } from "@/util/state.js";
 const props = defineProps({
   from: String,
 });
 let isDown = false;
-function down() {
+let oldX, oldY;
+function down(e) {
   isDown = true;
-  document.body.onmousemove = (e) => move(e);
-  document.body.onmouseup = up;
+  oldX = e.touches[0].clientX;
+  oldY = e.touches[0].clientY;
+  document.body.ontouchmove = (e) => move(e);
+  document.body.ontouchend = up;
 }
 function move(e) {
-  position.value[props.from].x += e.movementX;
-  position.value[props.from].y += e.movementY;
+  console.log(e);
+  position.value[props.from].x += e.touches[0].clientX - oldX;
+  position.value[props.from].y += e.touches[0].clientY - oldY;
+  oldX = e.touches[0].clientX;
+  oldY = e.touches[0].clientY;
 }
 function up() {
   isDown = false;
-  document.body.onmousemove = null;
-  document.body.onmouseup = null;
+  document.body.ontouchmove = null;
+  document.body.ontouchend = null;
   localStorage.setItem("position", JSON.stringify(position.value));
 }
 </script>
@@ -32,9 +51,15 @@ function up() {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 100%;
-  height: 100%;
   box-sizing: border-box;
-  z-index: 999;
+  z-index: 1;
+  .mask {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

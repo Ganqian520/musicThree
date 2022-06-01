@@ -1,42 +1,33 @@
 <template>
   <div class="index">
     <three class="three_" v-if="show.three" />
-
-    
-    <div class="anchor_" v-if="show.control" :style="{left:position.control.x+'px',top:position.control.y+'px'}">
+    <anchor from="control">
       <control />
-      <anchor from='control' />
-    </div>
+    </anchor>
     
-    <div class="anchor_" v-if="show.dou" :style="{left:position.dou.x+'px',top:position.dou.y+'px'}">
+    <anchor from="dou">
       <dou />
-      <anchor from="dou" />
-    </div>
-    
-    <div class="anchor_" v-if="show.net && state.isLogin.value" :style="{left:position.net.x+'px',top:position.net.y+'px'}">
+    </anchor>
+
+    <anchor from="net" v-if="state.isLogin.value">
       <netgq />
-      <anchor from="net" />
-    </div>
+    </anchor>
     
-    <div class="anchor_" v-if="show.lyric" :style="{left:position.lyric.x+'px',top:position.lyric.y+'px'}">
+    <anchor from="lyric">
       <lyric />
-      <anchor from="lyric" />
-    </div>
+    </anchor>
     
-    <div class="anchor_" v-if="show.effect" :style="{left:position.effect.x+'px',top:position.effect.y+'px'}">
+    <anchor from="effect">
       <effect />
-      <anchor from="effect" />
-    </div>
-    
-    <div class="anchor_" v-if="show.comments" :style="{left:position.comments.x+'px',top:position.comments.y+'px'}">
+    </anchor>
+
+    <anchor from="comments">
       <comments />
-      <anchor from="comments" />
-    </div>
-    
-    <div class="anchor_" v-if="show.piano" :style="{left:position.piano.x+'px',top:position.piano.y+'px'}">
+    </anchor>
+
+    <anchor from="piano">
       <piano />
-      <anchor from="piano" />
-    </div>
+    </anchor>
 
 
     <login class="login_" v-if="!state.isLogin.value" />

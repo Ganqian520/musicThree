@@ -159,12 +159,12 @@ function initThree() {
 //获取天空盒
 function getImg() {
   let arr = [
-    "right.jpg",
-    "left.jpg",
-    "top.jpg",
-    "bottom.jpg",
-    "front.jpg",
-    "back.jpg",
+    "right.webp",
+    "left.webp",
+    "top.webp",
+    "bottom.webp",
+    "front.webp",
+    "back.webp",
   ];
   return arr.map((v) => {
     return new URL(`../../assets/skybox/${v}`, import.meta.url).href;
