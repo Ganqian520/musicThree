@@ -120,11 +120,11 @@ export function getRealUrl(id) {
       data: JSON.stringify({ action: 'getNetEaseMusicUrl', url, })
     }).then(res => {
       if (res.data.url != 'https://music.163.com/404') {
-        let url = res.data.url.replace(/(http|https)/, 'https')
+        let url = res.data.url.replace(/http?s/, 'https')
         resolve(url)
       } else {
         instance.get(`/song/url?id=${id}`).then(res => {
-          let url = res.data.data[0].url.replace(/(http|https)/, 'https')
+          let url = res.data.data[0].url.replace(/http?s/, 'https')
           resolve(url)
         }).catch(err=>console.log(err))
       }
@@ -208,7 +208,6 @@ export function getSongList(id) {
       instance.get('/playlist/detail', {
         params: { id }
       }).then(res => {
-        console.log(res.data)
         let list = handleNetSongs(res.data.playlist.tracks)
         //我喜欢列表才缓存
         id == JSON.parse(songsList)[0].id && localStorage.setItem(`songListNet${id}`, JSON.stringify(list))
