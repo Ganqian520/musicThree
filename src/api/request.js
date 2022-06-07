@@ -120,7 +120,7 @@ export function getRealUrl(id) {
       data: JSON.stringify({ action: 'getNetEaseMusicUrl', url, })
     }).then(res => {
       if (res.data.url != 'https://music.163.com/404') {
-        let url = res.data.url.replace(/http?s/, 'https')
+        let url = res.data.url
         resolve(url)
       } else {
         instance.get(`/song/url?id=${id}`).then(res => {
