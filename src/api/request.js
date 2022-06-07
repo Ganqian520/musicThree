@@ -119,13 +119,13 @@ export function getRealUrl(id) {
       url: url_,
       data: JSON.stringify({ action: 'getNetEaseMusicUrl', url, })
     }).then(res => {
-      let url = res.data.url.replace(/http?s/, 'https')
+      let url = res.data.url.replace(/^https?/, 'https')
       if (url != 'https://music.163.com/404') {       
         resolve(url)
       } else {
         //如果是会员歌曲 向官方api请求
         instance.get(`/song/url?id=${id}`).then(res => {
-          let url = res.data.data[0].url.replace(/http?s/, 'https')
+          let url = res.data.data[0].url.replace(/^https?/, 'https')
           resolve(url)
         }).catch(err=>console.log(err))
       }
