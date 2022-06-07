@@ -109,7 +109,7 @@ export function getLyric(id) {
   })
 }
 
-//获取网易云音乐真实地址
+//获取网易云音乐真实地址 请求blob不用真实地址不让请求
 export function getRealUrl(id) {
   return new Promise((resolve, reject) => {
     let url = `https://music.163.com/song/media/outer/url?id=${id}.mp3`
@@ -119,10 +119,11 @@ export function getRealUrl(id) {
       url: url_,
       data: JSON.stringify({ action: 'getNetEaseMusicUrl', url, })
     }).then(res => {
-      if (res.data.url != 'https://music.163.com/404') {
-        let url = res.data.url
+      let url = res.data.url.replace(/http?s/, 'https')
+      if (url != 'https://music.163.com/404') {       
         resolve(url)
       } else {
+        //如果是会员歌曲 向官方api请求
         instance.get(`/song/url?id=${id}`).then(res => {
           let url = res.data.data[0].url.replace(/http?s/, 'https')
           resolve(url)
