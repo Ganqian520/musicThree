@@ -8,40 +8,35 @@
     }"
   >
     <slot class="content" />
+    <Axis />
     <div
-      class="mask bg"
+      class="mask"
       v-if="state.isOpenAnchor.value"
-      @touchstart="down"
+      @mousedown="down"
     ></div>
   </div>
 </template>
 
 <script setup>
-import { ref, toRaw } from "vue";
+import Axis from '@/components/widgets/axis.vue'
 import { position, state, show } from "@/util/state.js";
 const props = defineProps({
   from: String,
 });
 let isDown = false;
-let oldX, oldY;
 function down(e) {
   isDown = true;
-  oldX = e.touches[0].clientX;
-  oldY = e.touches[0].clientY;
-  document.body.ontouchmove = (e) => move(e);
-  document.body.ontouchend = up;
+  document.body.onmousemove = (e) => move(e);
+  document.body.onmouseup = up;
 }
 function move(e) {
-  console.log(e);
-  position.value[props.from].x += e.touches[0].clientX - oldX;
-  position.value[props.from].y += e.touches[0].clientY - oldY;
-  oldX = e.touches[0].clientX;
-  oldY = e.touches[0].clientY;
+  position.value[props.from].x += e.movementX;
+  position.value[props.from].y += e.movementY;
 }
 function up() {
   isDown = false;
-  document.body.ontouchmove = null;
-  document.body.ontouchend = null;
+  document.body.onmousemove = null;
+  document.body.onmouseup = null;
   localStorage.setItem("position", JSON.stringify(position.value));
 }
 </script>
@@ -51,8 +46,10 @@ function up() {
   position: absolute;
   left: 0px;
   top: 0px;
-  box-sizing: border-box;
   z-index: 1;
+  transform-style: preserve-3d;
+  transform: rotateY(45deg);
+  border: 1px cyan solid;
   .mask {
     position: absolute;
     z-index: 1;
@@ -60,6 +57,8 @@ function up() {
     left: 0;
     width: 100%;
     height: 100%;
+    backdrop-filter: blur(2px);
+    border: 1px cyan solid;
   }
 }
 </style>

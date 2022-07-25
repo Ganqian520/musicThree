@@ -38,11 +38,16 @@
     <span class="setting iconfont icon-shezhi" @mouseenter="()=>isOpenMenu=true"></span>
     <span class="msg">{{msgs[state.msg.value]}}</span>
     <!-- <fft style="backgroundColor:white;position:absolute" /> -->
+    
+    <!-- <Axis /> -->
   </div>
 </template>
 
 <script setup>
 import { ref ,defineAsyncComponent} from "vue";
+import {state,position,show} from '@/util/state.js'
+
+import Axis from '@/components/widgets/axis.vue'
 
 // import fft from "./fft.vue"
 
@@ -58,7 +63,7 @@ const login = defineAsyncComponent(()=> import('@/components/index/login.vue'))
 const comments = defineAsyncComponent(()=> import('@/components/index/comments.vue'))
 const piano = defineAsyncComponent(()=>import('@/components/piano/index.vue'))
 
-import {state,position,show} from '@/util/state.js'
+
 
 const isOpenMenu = ref(false)
 
@@ -81,6 +86,7 @@ show_ ? show.value = JSON.parse(show_) : null
   height: 100vh;
   position: relative;
   display: flex;
+  perspective: 900px;
   .anchor_ {
     position: absolute;
     z-index: 1;
