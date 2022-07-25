@@ -48,7 +48,7 @@ function up() {
   top: 0px;
   z-index: 1;
   transform-style: preserve-3d;
-  transform: rotateY(45deg);
+  // transform: rotateY(45deg);
   border: 1px cyan solid;
   .mask {
     position: absolute;
