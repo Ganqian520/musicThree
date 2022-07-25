@@ -15,9 +15,6 @@
       </div>
     </div>
 
-    <span class="msg">
-      如有问题欢迎发送到邮箱：2282227679@qq.com
-    </span>
   </div>
 </template>
 
